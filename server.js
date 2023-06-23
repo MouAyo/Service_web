@@ -1,4 +1,5 @@
 const express = require('express');
+const { generateETag } = require('./utils/EtagUtils');
 const app = express();
 const PORT = 8000;
 

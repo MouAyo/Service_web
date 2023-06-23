@@ -3,7 +3,6 @@ const db = new sqlite3.Database('database.sqlite');
 
 // Récupérer la liste des genres
 exports.getGenres = (req, res) => {
-  // Logique pour récupérer la liste des genres depuis la base de données
   db.all('SELECT * FROM genres', (err, rows) => {
     if (err) {
       console.error(err);
@@ -17,7 +16,6 @@ exports.getGenres = (req, res) => {
 // Créer un nouveau genre
 exports.createGenre = (req, res) => {
   const { name } = req.body;
-  // Logique pour créer un nouveau genre dans la base de données
   db.run('INSERT INTO genres (name) VALUES (?)',
     [name],
     function (err) {
