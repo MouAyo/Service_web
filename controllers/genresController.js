@@ -33,7 +33,6 @@ exports.createGenre = (req, res) => {
 exports.deleteGenre = (req, res) => {
   const genreId = req.params.id;
 
-  // Vérifier si le genre est utilisé dans un ou plusieurs films
   db.get('SELECT COUNT(*) AS count FROM films WHERE genre_id = ?', [genreId], (err, row) => {
     if (err) {
       console.error(err);
@@ -41,7 +40,6 @@ exports.deleteGenre = (req, res) => {
     } else if (row.count > 0) {
       res.status(400).json({ error: 'Impossible de supprimer le genre car il est utilisé dans un ou plusieurs films' });
     } else {
-      // Supprimer le genre s'il n'est pas utilisé dans les films
       db.run('DELETE FROM genres WHERE id = ?', [genreId], function (err) {
         if (err) {
           console.error(err);

@@ -4,7 +4,6 @@ const crypto = require('crypto');
 
 // Récupérer la liste des acteurs
 exports.getActors = (req, res) => {
-  // Logique pour récupérer la liste des acteurs depuis la base de données
   db.all('SELECT * FROM actors', (err, rows) => {
     if (err) {
       console.error(err);
@@ -28,7 +27,7 @@ exports.getActorById = (req, res) => {
         const actor = row;
         const etag = generateETag(actor);
   
-        res.setHeader('ETag', etag); // Set the ETag in the response headers
+        res.setHeader('ETag', etag); 
         res.status(200).json(actor);
       }
     });
@@ -38,7 +37,6 @@ exports.getActorById = (req, res) => {
 // Créer un nouvel acteur
 exports.createActor = (req, res) => {
   const { first_name, last_name, date_of_birth, date_of_death } = req.body;
-  // Logique pour créer un nouvel acteur dans la base de données
   db.run('INSERT INTO actors (first_name, last_name, date_of_birth, date_of_death) VALUES (?, ?, ?, ?)',
     [first_name, last_name, date_of_birth, date_of_death],
     function (err) {
@@ -56,7 +54,6 @@ exports.updateActor = (req, res) => {
   const { first_name, last_name, date_of_birth, date_of_death } = req.body;
   const receivedETag = req.headers['if-match'];
 
-  // Retrieve the existing actor from the database
   db.get('SELECT * FROM actors WHERE id = ?', [actorId], (err, row) => {
     if (err) {
       console.error(err);
@@ -67,7 +64,6 @@ exports.updateActor = (req, res) => {
       const existingETag = generateETag(row);
 
       if ( receivedETag && receivedETag === existingETag ) {
-        // ETags match, proceed with updating the actor
         db.run('UPDATE actors SET first_name = ?, last_name = ?, date_of_birth = ?, date_of_death = ? WHERE id = ?',
           [first_name, last_name, date_of_birth, date_of_death, actorId],
           function (err) {
@@ -91,7 +87,6 @@ exports.updateActor = (req, res) => {
 // Supprimer un acteur
 exports.deleteActor = (req, res) => {
   const actorId = req.params.id;
-  // Logique pour supprimer un acteur de la base de données
   db.run('DELETE FROM actors WHERE id = ?', [actorId], function (err) {
     if (err) {
       console.error(err);
